@@ -1,0 +1,55 @@
+[project]
+requires-python = ">=3.12"
+
+[tool.ruff]
+line-length = 108
+
+[tool.ruff.format]
+quote-style = "single"
+preview = true
+
+[tool.ruff.lint]
+select = ["ALL"]
+preview = true
+ignore = [
+  "Q000", # double quotes
+  ]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.per-file-ignores]
+"test*.py" = [
+  "S101",  # Allow asserts in test files
+  "SLF001",  # Allow private member access in tests
+  "PLC2701", # Allow imports of private members for testing
+]
+
+[tool.pytest.ini_options]
+addopts = "--cov=. --cov-report html:.cover/html"
+testpaths = ["test"]
+filterwarnings = [
+    "ignore:GetQueryParameters is deprecated:DeprecationWarning:kiota_abstractions.default_query_parameters",
+    "ignore:This class is deprecated:DeprecationWarning:msgraph.generated.users.users_request_builder"
+]
+
+[tool.coverage.run]
+branch = true
+parallel = true
+source = ["backend"]
+omit = [
+    "test*",
+    "*/__init__.py",
+    "experiments/*"
+]
+concurrency=['thread', 'gevent']
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = [
+    'if __name__ == .__main__.:',
+    '^\s*#.*',
+    '^\s*raise NotImplementedError',
+    '^\s*if TYPE_CHECKING:',
+    '^\s*@overload( |$)',
+]
